@@ -1,14 +1,10 @@
-version: '3.8'
-
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    stdin_open: true 
-    tty: true      
-    image: app-desafio-automy
-    container_name: app-desafio
+  web:
+    build: .
     ports:
       - "3000:3000"
-    
+    volumes:
+      - .:/app
+    environment:
+      PYTHONPATH: /app/src
+    command: ["python", "/app/src/main.py"]

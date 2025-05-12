@@ -2,9 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copia TUDO da pasta atual para /app no container
-COPY . .
+ENV PYTHONPATH=/app
 
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python","-u","./src/main.py"]
+COPY . .
+
+# Use este comando para manter o Flask em execução
+CMD ["flask", "run", "--host=0.0.0.0", "--port=3000"]

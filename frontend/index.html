@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartódromo Digital</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>🏎️ Bem-vindo ao Kartódromo Digital!</h1>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    
+    {% if upcoming_races %}
+        <h2>🚀 Próximas Corridas:</h2>
+        <ul>
+        {% for race in upcoming_races %}
+            <li>{{ race.data_agendamento }} às {{ race.horario_agendamento }} ({{ race.qtde_pessoas }} pessoas)</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma corrida agendada.</p>
+    {% endif %}
+
+    {% if past_races and show_history %}
+        <h2>📜 Histórico Completo de Corridas:</h2>
+        <ul>
+        {% for race in past_races %}
+            <li>{{ race.data_agendamento }} às {{ race.horario_agendamento }} - {{ race.qtde_pessoas }} pessoas | Agendado em: {{ race.datetime_formulario }}</li>
+        {% endfor %}
+        </ul>
+    {% elif past_races %}
+        <h2>⏳ Corridas Passadas (clique para ver):</h2>
+        <p>Total: {{ past_races|length }} corridas realizadas</p>
+        <a href="/toggle-history">Mostrar Histórico</a>
+    {% endif %}
+</body>
+</html>

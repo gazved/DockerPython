@@ -1,36 +1,44 @@
-import sys
+from flask import Flask, render_template, request
 from api.client import AutomyClient
 from services.filter_service import filter_races_by_date
 from services.message_service import format_races_message, show_full_history
 
-def main():
+app = Flask(__name__, template_folder="../frontend")
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+    client = AutomyClient()
+    email = request.form.get("email", "john.doe@gmail.com") if request.method == "POST" else "john.doe@gmail.com"
     try:
-        client = AutomyClient()
-        races_data = client.get_races("john.doe@gmail.com")
+        races_data = client.get_races(email)
         past_races, upcoming_races = filter_races_by_date(races_data)
         
-        print("\n" + "="*50, flush=True)
-        print(format_races_message(upcoming_races, past_races), flush=True)
+        if request.path == "/toggle-history":
+            return render_template(
+                "index.html",
+                upcoming_races=upcoming_races,
+                past_races=past_races,
+                show_history=True
+            )
         
-        while True:
-            print("\nℹ️ Digite 'HISTORICO' para ver corridas passadas ou 'SAIR' para encerrar", flush=True)
-            try:
-                command = input(">>> ").strip().upper()
-            except EOFError:
-                print("\nModo não-interativo detectado. Encerrando...", flush=True)
-                break
-                
-            if command == "HISTORICO":
-                print(show_full_history(past_races), flush=True)
-            elif command == "SAIR":
-                print("\nObrigado por usar nosso sistema! 🏁", flush=True)
-                break
-            else:
-                print("\n⚠️ Comando inválido. Tente novamente.", flush=True)
-                
+        return render_template(
+            "index.html",
+            upcoming_races=upcoming_races,
+            past_races=past_races,
+            show_history=False
+        )
     except Exception as e:
-        print(f"\n❌ Erro inesperado: {str(e)}", file=sys.stderr, flush=True)
-        sys.exit(1)
+        return render_template(
+            "index.html",
+            upcoming_races=[],
+            past_races=[],
+            show_history=False,
+            error=f"Erro ao carregar dados: {str(e)}"
+        )
+
+@app.route("/toggle-history")
+def toggle_history():
+    return home()
 
 if __name__ == "__main__":
-    main()
+    app.run(host="0.0.0.0", port=3000, debug=True)
