@@ -27,7 +27,7 @@
    -Histórico de Corridas: Clique em "Mostrar Histórico" para visualizar o histórico completo de corridas passadas.
 
    - Funções Disponíveis
-     -src/api/client.py
+    -src/api/client.py
        AutomyClient.authenticate():
          Descrição: Autentica na API externa (https://appsaccess.automy.com.br/login) usando as credenciais fornecidas (username: fldoaogopdege, password: ygalepsm) e obtém um token JWT válido por 15 minutos.
          Retorno: O token JWT armazenado em self.token.
@@ -35,12 +35,12 @@
          Descrição: Faz uma requisição à API para buscar corridas associadas ao email fornecido, usando uma query SQL (SELECT * FROM desafio.cadastro_baterias_desafio WHERE email = '<email>').
          Parâmetro: email (string) - Email do cliente (padrão: john.doe@gmail.com).
          Retorno: Lista de dicionários com dados das corridas (ex.: [{"data_agendamento": "20/04/2025", ...}, ...]).
-     -src/services/filter_service.py
+    -src/services/filter_service.py
        filter_races_by_date(races_data):
          Descrição: Filtra os dados das corridas com base na data atual, separando em corridas passadas e futuras.
          Parâmetro: races_data (lista) - Dados brutos retornados pela API.
          Retorno: Tupla (past_races, upcoming_races) - Listas de corridas passadas e futuras.
-     -src/services/message_service.py
+    -src/services/message_service.py
        format_races_message(upcoming_races, past_races):
          Descrição: Formata mensagens de texto para exibir corridas (não usado diretamente no frontend atual, substituído por Jinja2).
          Parâmetros: upcoming_races e past_races (listas).
@@ -49,7 +49,7 @@
          Descrição: Formata o histórico completo de corridas passadas (não usado diretamente no frontend atual).
          Parâmetro: past_races (lista).
          Retorno: String formatada com o histórico.
-     -src/main.py
+    -src/main.py
        Rotas:
          / (GET/POST):
          Descrição: Rota principal que busca corridas, filtra os dados e renderiza o template index.html.
