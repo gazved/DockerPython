@@ -1,7 +1,10 @@
-FROM ubuntu:latest
+FROM python:3.11-slim
 
-# Expondo a porta 3000
-EXPOSE 3000
+WORKDIR /app
 
-# Entry point padrão
-ENTRYPOINT ["top", "-b"]
+# Copia TUDO da pasta atual para /app no container
+COPY . .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python","-u","./src/main.py"]
